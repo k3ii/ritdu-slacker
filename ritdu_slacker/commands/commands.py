@@ -9,8 +9,6 @@ logger = logging.getLogger()
 logger.setLevel(logging.ERROR)
 CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
 
-status_map = {"ok": "#00FF00", "warning": "warning", "error": "danger"}
-
 
 def requests_retry_session(
     retries=5,
