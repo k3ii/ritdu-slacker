@@ -31,7 +31,13 @@ def requests_retry_session(
 
 
 def post_message_to_slack(
-    text, thread_uuid, message_uuid, workspace, channel, thread_broadcast=False
+    text,
+    thread_uuid,
+    message_uuid,
+    message_or_thread_uuid,
+    workspace,
+    channel,
+    thread_broadcast=False,
 ) -> dict:
     return (
         requests_retry_session()
@@ -43,8 +49,8 @@ def post_message_to_slack(
                 "workspace": workspace,
                 "channel": channel,
                 "message_uuid": message_uuid,
-                "message_or_thread_uuid": "",
                 "thread_uuid": thread_uuid,
+                "message_or_thread_uuid": message_or_thread_uuid,
                 "thread_broadcast": thread_broadcast,
                 "message": text,
                 "fallback_message": text,
@@ -59,9 +65,9 @@ def post_file_to_slack(
     text,
     thread_uuid,
     message_uuid,
+    message_or_thread_uuid,
     workspace,
     channel,
-    file_name,
     file_bytes,
     thread_broadcast=False,
 ) -> dict:
@@ -80,8 +86,8 @@ def post_file_to_slack(
                         "workspace": workspace,
                         "channel": channel,
                         "message_uuid": message_uuid,
-                        "message_or_thread_uuid": "",
                         "thread_uuid": thread_uuid,
+                        "message_or_thread_uuid": message_or_thread_uuid,
                         "thread_broadcast": thread_broadcast,
                         "message": text,
                         "fallback_message": text,
@@ -92,10 +98,6 @@ def post_file_to_slack(
         )
         .json()
     )
-
-
-def check_result(result):
-    return result.get("ok")
 
 
 @click.group(help="CLI tool send/update slack messages and send files")
@@ -118,23 +120,37 @@ def main():
     "-u",
     default=None,
     required=False,
-    help="uuid of message to update",
+    help="create/replace existing message",
 )
 @click.option(
     "--thread-uuid",
     "-t",
     default=None,
     required=False,
-    help="thread uuid to send message to",
+    help="instantiate thread",
+)
+@click.option(
+    "--message-or-thread-uuid",
+    "-n",
+    default=None,
+    required=False,
+    help="create or reply to existing thread",
 )
 @click.option(
     "--thread-broadcast",
     "-b",
     is_flag=True,
-    help="flag to broadcast message to thread",
+    help="flag to broadcast message to channel from thread",
 )
 def message(
-    debug, text, thread_uuid, message_uuid, workspace, channel, thread_broadcast
+    debug,
+    text,
+    thread_uuid,
+    message_uuid,
+    message_or_thread_uuid,
+    workspace,
+    channel,
+    thread_broadcast,
 ):
     if debug:
         logger.setLevel(logging.DEBUG)
@@ -143,6 +159,7 @@ def message(
         text=f"{text}",
         thread_uuid=thread_uuid if thread_uuid else "",
         message_uuid=message_uuid if message_uuid else "",
+        message_or_thread_uuid=message_or_thread_uuid if message_or_thread_uuid else "",
         workspace=workspace,
         channel=channel,
         thread_broadcast=thread_broadcast,
@@ -162,30 +179,45 @@ def message(
     "-u",
     default=None,
     required=False,
-    help="uuid of message to update",
+    help="create/replace existing message",
 )
 @click.option(
     "--thread-uuid",
     "-t",
     default=None,
     required=False,
-    help="thread uuid to send message to",
+    help="instantiate thread",
+)
+@click.option(
+    "--message-or-thread-uuid",
+    "-n",
+    default=None,
+    required=False,
+    help="create or reply to existing thread",
 )
 @click.option(
     "--thread-broadcast",
     "-b",
     is_flag=True,
-    help="flag to broadcast message to thread",
+    help="flag to broadcast message to channel from thread",
 )
 @click.option(
     "--file",
     "-f",
     default=None,
     required=True,
-    help="file to send to slack, can be path to file or url",
+    help="file to send to slack",
 )
 def file(
-    debug, text, thread_uuid, message_uuid, workspace, channel, file, thread_broadcast
+    debug,
+    text,
+    thread_uuid,
+    message_uuid,
+    message_or_thread_uuid,
+    workspace,
+    channel,
+    file,
+    thread_broadcast,
 ):
     if debug:
         logger.setLevel(logging.DEBUG)
@@ -197,9 +229,11 @@ def file(
             text=f"{text}" if text else f"File: {file_basename}",
             thread_uuid=thread_uuid if thread_uuid else "",
             message_uuid=message_uuid if message_uuid else "",
+            message_or_thread_uuid=message_or_thread_uuid
+            if message_or_thread_uuid
+            else "",
             workspace=workspace,
             channel=channel,
-            file_name=file_basename,
             file_bytes=f,
             thread_broadcast=thread_broadcast,
         )

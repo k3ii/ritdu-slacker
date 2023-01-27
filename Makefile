@@ -44,7 +44,7 @@ install:
 
 .vscode/settings.json: $(VENV)/bin/activate
 	@mkdir -p .vscode
-	@echo "{\"python.pythonPath\": \"$(VENV)/bin/python\", \"python.terminal.activateEnvInCurrentTerminal\": true}" > .vscode/settings.json
+	@echo "{\"python.defaultInterpreterPath\": \"$(VENV)/bin/python\", \"python.terminal.activateEnvInCurrentTerminal\": true}" > .vscode/settings.json
 
 vscode: .vscode/settings.json
 
