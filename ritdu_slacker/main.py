@@ -1,9 +1,10 @@
-from ritdu_slacker.cli import SlackMessageCLI
+from fly_cli import FlyCLI
+from ritdu_slacker.api import SlackClient
 
 
 def main():
-    cli = SlackMessageCLI()
-    cli.main()
+    fly = FlyCLI()
+    fly(SlackClient())
 
 
 if __name__ == "__main__":

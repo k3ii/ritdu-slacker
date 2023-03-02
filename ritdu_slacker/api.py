@@ -22,15 +22,15 @@ class SlackClient:
         self.session.mount("http://", self.adapter)
         self.session.mount("https://", self.adapter)
 
-    def post_message(
+    def message(
         self,
-        text,
-        workspace,
-        channel,
-        thread_uuid=None,
-        message_uuid=None,
-        message_or_thread_uuid=None,
-        thread_broadcast=False,
+        text:str,
+        workspace:str,
+        channel:str,
+        thread_uuid:str = '',
+        message_uuid:str='',
+        message_or_thread_uuid:str='',
+        thread_broadcast:bool=False
     ):
         url = "https://slacker.cube-services.net/api/message-template"
         headers = {"Content-Type": "application/json"}
@@ -50,16 +50,16 @@ class SlackClient:
         ).json()
         return response
 
-    def post_file(
+    def file(
         self,
-        file_bytes,
-        text,
-        workspace,
-        channel,
-        thread_uuid=None,
-        message_uuid=None,
-        message_or_thread_uuid=None,
-        thread_broadcast=False,
+        file_bytes:str,
+        text:str,
+        workspace:str,
+        channel:str,
+        thread_uuid:str='',
+        message_uuid:str='',
+        message_or_thread_uuid:str='',
+        thread_broadcast:bool=False,
     ):
         url = "https://slacker.cube-services.net/api/message-template"
         headers = {"Accept": "application/json"}
