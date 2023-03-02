@@ -7,7 +7,7 @@ build: ## Build the package
 	poetry build
 
 check: ## Check the package
-	poetry run twine check dist/*
+	twine check dist/*
 
 clean: ## Clean the package
 	rm -rf dist/*
@@ -33,19 +33,26 @@ lock: ## Update dependency lockfile
 publish: install-prod clean build check version ## Publish the package
 	poetry publish
 
-setup-dev: setup-poetry install-dev vscode
+publish-test: install clean build check version ## Publish to the package to the PyPI test platform
+	poetry config repositories.testpypi https://test.pypi.org/legacy/
+	poetry publish --repository testpypi
 
-setup-poetry: ## Setup Poetry
+setup-dev: setup-binaries install-dev vscode
+
+setup-binaries: ## Setup binaries for developmet. Poetry, Twine.
 	pip install pipx
 	pipx install poetry
+	pipx install twine
 
 test: ## Test the package
 	poetry run pytest
 
 version: ## Generate version from GitHub tag
-	@[ "$(GITHUB_REF)" ] \
-		&& (VERSION="$(shell echo "$(GITHUB_REF)" | sed 's/^refs\/tags\/v\(.*\)/\1/')" \
-		&& sed -i 's/version = ".*"/version = "'${VERSION}'"/' pyproject.toml) \
+	@[ "$(GITHUB_REFNAME)" ] \
+		&& ( \
+			VERSION="$(shell echo "$(GITHUB_REFNAME)" | sed -e 's#v\(.*\)#\1#')" \
+			&& sed -i '' -e 's/version = ".*"/version = "'$${VERSION}'"/' pyproject.toml \
+		) \
 		|| exit 0
 
 vscode: ## Update VSCode settings
