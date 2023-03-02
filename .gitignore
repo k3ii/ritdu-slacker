@@ -1,0 +1,8 @@
+/*.egg-info/
+/.direnv/
+/.eggs/
+/.env
+/.envrc
+/.venv/
+/dist/
+__pycache__/

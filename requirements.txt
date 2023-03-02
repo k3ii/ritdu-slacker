@@ -1,4 +1,4 @@
 click
 click-log
-boto3
+pbr
 requests
