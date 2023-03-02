@@ -7,7 +7,7 @@ build: ## Build the package
 	poetry build
 
 check: ## Check the package
-	twine check dist/*
+	twine check --strict dist/*
 
 clean: ## Clean the package
 	rm -rf dist/*
