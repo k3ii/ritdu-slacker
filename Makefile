@@ -1,49 +1,54 @@
-PYTHON = $(shell which python)
+MODULES = ritdu_slacker tests
 
 help:
-	@echo "---------------HELP-----------------"
-	@echo "To dev the project type make dev"
-	@echo "To build the project type make build"
-	@echo "To install the project type make install"
-	@echo "To format the project type make fmt"
-	@echo "To clean the project type make clean"
-	@echo "------------------------------------"
+	@egrep -h '\s##\s' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
-install:
-	pip install pip wheel --upgrade
-	pip install .
+build: ## Build the package
+	poetry build
 
-install-dev:
-	pip install pip wheel --upgrade
-	pip install '.[develop]'
+check: ## Check the package
+	poetry run twine check dist/*
 
-build:
-	python setup.py build
-
-check:
-	python setup.py check --strict
-
-clean:
-	git clean -fd
-
-clean-dist:
+clean: ## Clean the package
 	rm -rf dist/*
 
-dev: vscode fmt install-dev
+dev: install vscode ## Setup development environment
 
-.PHONY: dist
-dist: check
-	python setup.py sdist
+format: ## Format the code
+	poetry run black $(MODULES)
 
-fmt:
-	python -m black .
+install: ## Install all dependencies
+	poetry install --sync
 
-test:
-	python setup.py test
+install-prod: ## Install production dependencies
+	poetry install --without=dev --sync
 
-publish: clean-dist dist
-	python -m twine upload dist/*
+lint: ## Lint the code
+	poetry run black --check $(MODULES)
+	-poetry run pylint $(MODULES)
 
-vscode:
-	@mkdir -p .vscode
-	@echo "{\"python.defaultInterpreterPath\": \"$(PYTHON)\", \"python.terminal.activateEnvInCurrentTerminal\": true}" > .vscode/settings.json
+lock: ## Update dependency lockfile
+	poetry lock
+
+publish: install-prod clean build check version ## Publish the package
+	poetry publish
+
+setup-dev: setup-poetry install-dev vscode
+
+setup-poetry: ## Setup Poetry
+	pip install pipx
+	pipx install poetry
+
+test: ## Test the package
+	poetry run pytest
+
+version: ## Generate version from GitHub tag
+	@[ "$(GITHUB_REF)" ] \
+		&& (VERSION="$(shell echo "$(GITHUB_REF)" | sed 's/^refs\/tags\/v\(.*\)/\1/')" \
+		&& sed -i 's/version = ".*"/version = "'${VERSION}'"/' pyproject.toml) \
+		|| exit 0
+
+vscode: ## Update VSCode settings
+	@[ -d .vscode ] \
+		&& echo "{\"python.defaultInterpreterPath\": \"$(shell which python)\", \"python.terminal.activateEnvInCurrentTerminal\": true}" > .vscode/settings.json \
+		|| exit 0

@@ -3,7 +3,6 @@ import responses
 from pyfakefs.fake_filesystem_unittest import Patcher
 from pytest import fixture
 
-from ritdu_slacker.api import SlackClient
 from ritdu_slacker.cli import SlackMessageCLI
 
 
@@ -14,15 +13,11 @@ def mocked_responses():
 
 
 @fixture
-def slack():
-    yield SlackClient()
+def cli():
+    yield SlackMessageCLI()
 
 
 @fixture
-def cli(slack):
-    yield SlackMessageCLI(slack)
-
-@fixture
-def fs():
+def filesystem():
     with Patcher(allow_root_user=False) as patcher:
         yield patcher.fs

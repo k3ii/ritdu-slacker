@@ -1,5 +1,6 @@
-import os
+import functools
 import json
+import os
 
 import click
 
@@ -7,16 +8,18 @@ from ritdu_slacker import logger, TOOL_NAME, TOOL_VERSION
 from ritdu_slacker.api import SlackClient
 
 
-class SlackMessageCLI:
-    def __init__(self, sender=None):
-        if sender is None:
-            sender = SlackClient()
-        self.sender = sender
+@functools.cache
+def get_client():
+    return SlackClient()
 
+
+class SlackMessageCLI:
     @click.group(help="CLI tool send/update slack messages and send files")
     @click.help_option("--help", "-h")
     @click.version_option(
-        prog_name=TOOL_NAME, version=TOOL_VERSION, message="%(prog)s, version %(version)s"
+        prog_name=TOOL_NAME,
+        version=TOOL_VERSION,
+        message="%(prog)s, version %(version)s",
     )
     def main():
         pass
@@ -67,7 +70,7 @@ class SlackMessageCLI:
         channel,
         thread_broadcast,
     ):
-        sender = SlackClient()
+        sender = get_client()
         result = sender.post_message(
             text=f"{text}",
             thread_uuid=thread_uuid if thread_uuid else "",
@@ -137,13 +140,11 @@ class SlackMessageCLI:
         file,
         thread_broadcast,
     ):
-        if debug:
-            logger.setLevel(logging.DEBUG)
-        logger.debug(f"Send file: {file}")
+        logger.debug("Send file: %s", file)
 
         file_basename = os.path.basename(file)
-        sender = SlackClient()
-        with open(file, "rb") as f:
+        sender = get_client()
+        with open(file, "rb") as file:
             result = sender.post_file(
                 text=f"{text}" if text else f"File: {file_basename}",
                 thread_uuid=thread_uuid if thread_uuid else "",
@@ -153,7 +154,7 @@ class SlackMessageCLI:
                 else "",
                 workspace=workspace,
                 channel=channel,
-                file_bytes=f,
+                file_bytes=file,
                 thread_broadcast=thread_broadcast,
             )
         print(json.dumps(result))
