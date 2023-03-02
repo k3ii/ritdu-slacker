@@ -30,10 +30,10 @@ lint: ## Lint the code
 lock: ## Update dependency lockfile
 	poetry lock
 
-publish: install-prod clean build check version ## Publish the package
+publish: install-prod clean build check ## Publish the package
 	poetry publish
 
-publish-test: install clean build check version ## Publish to the package to the PyPI test platform
+publish-test: install clean build check ## Publish to the package to the PyPI test platform
 	poetry config repositories.testpypi https://test.pypi.org/legacy/
 	poetry publish --repository testpypi
 
@@ -46,14 +46,6 @@ setup-binaries: ## Setup binaries for developmet. Poetry, Twine.
 
 test: ## Test the package
 	poetry run pytest
-
-version: ## Generate version from GitHub tag
-	@[ "$(GITHUB_REFNAME)" ] \
-		&& ( \
-			VERSION="$(shell echo "$(GITHUB_REFNAME)" | sed -e 's#v\(.*\)#\1#')" \
-			&& sed -i '' -e 's/version = ".*"/version = "'$${VERSION}'"/' pyproject.toml \
-		) \
-		|| exit 0
 
 vscode: ## Update VSCode settings
 	@[ -d .vscode ] \
