@@ -1,5 +1,0 @@
-pyfakefs
-pypandoc
-pytest
-pytest-mock
-responses

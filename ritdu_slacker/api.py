@@ -1,5 +1,3 @@
-import json
-from signal import signal, SIGINT
 from requests import Session
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
@@ -33,7 +31,6 @@ class SlackClient:
         thread_broadcast=False,
     ):
         url = "https://slacker.cube-services.net/api/message-template"
-        headers = {"Content-Type": "application/json"}
         data = {
             "command": "SimpleMessage",
             "workspace": workspace,
@@ -45,9 +42,7 @@ class SlackClient:
             "message": text,
             "fallback_message": text,
         }
-        response = self.session.post(
-            url=url, headers=headers, json=data, timeout=(10, 10)
-        ).json()
+        response = self.session.post(url=url, json=data, timeout=(10, 10)).json()
         return response
 
     def post_file(
@@ -62,24 +57,19 @@ class SlackClient:
         thread_broadcast=False,
     ):
         url = "https://slacker.cube-services.net/api/message-template"
-        headers = {"Accept": "application/json"}
         files = {"file": file_bytes}
         data = {
-            "json": json.dumps(
-                {
-                    "command": "SimpleMessage",
-                    "workspace": workspace,
-                    "channel": channel,
-                    "message_uuid": message_uuid,
-                    "thread_uuid": thread_uuid,
-                    "message_or_thread_uuid": message_or_thread_uuid,
-                    "thread_broadcast": thread_broadcast,
-                    "message": text,
-                    "fallback_message": text,
-                }
-            )
+            "command": "SimpleMessage",
+            "workspace": workspace,
+            "channel": channel,
+            "message_uuid": message_uuid,
+            "thread_uuid": thread_uuid,
+            "message_or_thread_uuid": message_or_thread_uuid,
+            "thread_broadcast": thread_broadcast,
+            "message": text,
+            "fallback_message": text,
         }
         response = self.session.post(
-            url=url, headers=headers, files=files, data=data, timeout=(10, 10)
+            url=url, files=files, json=data, timeout=(10, 10)
         ).json()
         return response
