@@ -1,32 +1,22 @@
-import click
 import os
 import json
-from .api import SlackClient
-from .version import __version__
-import logging
 
-_tool_name = "ritdu-slacker"  # Try fetch this from pip __main__ instead of repeating.
-logger = logging.getLogger()
-logger.setLevel(logging.ERROR)
-logging.basicConfig(
-    format="[%(asctime)s] "
-    + _tool_name
-    + " [%(levelname)s] %(funcName)s %(lineno)d: %(message)s"
-)
+import click
+
+from ritdu_slacker import logger, TOOL_NAME, TOOL_VERSION
+from ritdu_slacker.api import SlackClient
 
 
 class SlackMessageCLI:
-    def __init__(self):
-        self.sender = SlackClient()
-
-    def version():
-        """Return the version of this cli tool"""
-        return __version__
+    def __init__(self, sender=None):
+        if sender is None:
+            sender = SlackClient()
+        self.sender = sender
 
     @click.group(help="CLI tool send/update slack messages and send files")
     @click.help_option("--help", "-h")
     @click.version_option(
-        prog_name=_tool_name, version=version(), message="%(prog)s, version %(version)s"
+        prog_name=TOOL_NAME, version=TOOL_VERSION, message="%(prog)s, version %(version)s"
     )
     def main():
         pass

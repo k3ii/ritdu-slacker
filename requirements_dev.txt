@@ -1,5 +1,0 @@
-pylint
-black
-setuptools
-wheel
-twine

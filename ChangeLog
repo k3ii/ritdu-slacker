@@ -1,0 +1,28 @@
+CHANGES
+=======
+
+* Cleanup
+
+v1.1.0
+------
+
+* Refactor into loadable class (#7)
+
+v1.0.0
+------
+
+* v1.0.0
+* Add all features
+
+v0.0.1
+------
+
+* v0.0.1
+* Add requests
+
+v0.0.0
+------
+
+* --
+* Initial PR
+* Initial commit
