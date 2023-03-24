@@ -35,6 +35,9 @@ class SlackMessageCLI:
         "--channel", "-c", default=None, required=True, help="slack channel name"
     )
     @click.option(
+        "--command", "-C", default="SimpleMessage", required=False, help="SimpleMessage|SlackJson"
+    )
+    @click.option(
         "--message-uuid",
         "-u",
         default=None,
@@ -67,6 +70,7 @@ class SlackMessageCLI:
         message_uuid,
         message_or_thread_uuid,
         workspace,
+        command,
         channel,
         thread_broadcast,
     ):
@@ -79,6 +83,7 @@ class SlackMessageCLI:
             if message_or_thread_uuid
             else "",
             workspace=workspace,
+            command=command,
             channel=channel,
             thread_broadcast=thread_broadcast,
         )
