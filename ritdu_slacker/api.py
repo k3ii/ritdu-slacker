@@ -25,14 +25,20 @@ class SlackClient:
         text,
         workspace,
         channel,
+        command="SimpleMessage",
         thread_uuid=None,
         message_uuid=None,
         message_or_thread_uuid=None,
         thread_broadcast=False,
     ):
         url = "https://slacker.cube-services.net/api/message-template"
+        fallback = text
+        # fallback_message cannot be a dict, set to blank str if we detect SlackJson
+        if command == "SlackJson":
+            fallback = "Error sending json, fallback string stub."
+
         data = {
-            "command": "SimpleMessage",
+            "command": command,
             "workspace": workspace,
             "channel": channel,
             "message_uuid": message_uuid,
@@ -40,7 +46,7 @@ class SlackClient:
             "message_or_thread_uuid": message_or_thread_uuid,
             "thread_broadcast": thread_broadcast,
             "message": text,
-            "fallback_message": text,
+            "fallback_message": fallback,
         }
         response = self.session.post(url=url, json=data, timeout=(10, 10)).json()
         return response
