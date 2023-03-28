@@ -75,8 +75,12 @@ class SlackMessageCLI:
         thread_broadcast,
     ):
         sender = get_client()
+        if command == "SlackJson":
+          text = json.loads(text)
+        else:
+          text = f"{text}"
         result = sender.post_message(
-            text=f"{text}",
+            text=text,
             thread_uuid=thread_uuid if thread_uuid else "",
             message_uuid=message_uuid if message_uuid else "",
             message_or_thread_uuid=message_or_thread_uuid
