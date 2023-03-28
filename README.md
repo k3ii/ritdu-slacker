@@ -1,6 +1,6 @@
 # ritdu-slacker
 pip installable bin to interact with the Ringier SA internal interface for slack.
-Provides both CLI and Native Lib functionality.
+Provides both CLI and Native python lib functionality.
 
 ## Motivation
 - Single implementation of a wrapper around our internal slack interface.
