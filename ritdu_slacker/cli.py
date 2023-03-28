@@ -35,7 +35,11 @@ class SlackMessageCLI:
         "--channel", "-c", default=None, required=True, help="slack channel name"
     )
     @click.option(
-        "--command", "-C", default="SimpleMessage", required=False, help="SimpleMessage|SlackJson"
+        "--command",
+        "-C",
+        default="SimpleMessage",
+        required=False,
+        help="SimpleMessage|SlackJson",
     )
     @click.option(
         "--message-uuid",
@@ -76,9 +80,9 @@ class SlackMessageCLI:
     ):
         sender = get_client()
         if command == "SlackJson":
-          text = json.loads(text)
+            text = json.loads(text)
         else:
-          text = f"{text}"
+            text = f"{text}"
         result = sender.post_message(
             text=text,
             thread_uuid=thread_uuid if thread_uuid else "",

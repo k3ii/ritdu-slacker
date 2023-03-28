@@ -2,6 +2,7 @@ from requests import Session
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 
+
 class SlackClient:
     def __init__(self, retries=5, backoff_factor=0.5, status_forcelist=(500, 502, 504)):
         self.retries = retries
@@ -34,7 +35,7 @@ class SlackClient:
         fallback = text
         # fallback_message cannot be a dict, set to blank str if we detect SlackJson
         if command == "SlackJson":
-          fallback = "Error sending json, fallback string stub."
+            fallback = "Error sending json, fallback string stub."
 
         data = {
             "command": command,
