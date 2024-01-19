@@ -12,7 +12,7 @@ check: ## Check the package
 clean: ## Clean the package
 	rm -rf dist/*
 
-dev: install vscode ## Setup development environment
+install-dev: install vscode ## Setup development environment
 
 format: ## Format the code
 	poetry run black $(MODULES)
@@ -39,8 +39,9 @@ publish-test: install clean build check ## Publish to the package to the PyPI te
 
 setup-dev: setup-binaries install-dev vscode
 
-setup-binaries: ## Setup binaries for developmet. Poetry, Twine.
-	pip install pipx
+setup-binaries: ## Setup binaries for development. Poetry, Twine.
+	brew install pipx || python3 -m pip install --user pipx
+	pipx ensurepath
 	pipx install poetry
 	pipx install twine
 
