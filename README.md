@@ -57,15 +57,16 @@ $ make
 build                Build the package
 check                Check the package
 clean                Clean the package
-dev                  Setup development environment
 format               Format the code
+install-dev          Setup development environment
 install-prod         Install production dependencies
 install              Install all dependencies
 lint                 Lint the code
 lock                 Update dependency lockfile
+publish-test         Publish to the package to the PyPI test platform
 publish              Publish the package
+setup-binaries       Setup binaries for development. Poetry, Twine.
 test                 Test the package
-version              Generate version from GitHub tag
 vscode               Update VSCode settings
 ```
 
