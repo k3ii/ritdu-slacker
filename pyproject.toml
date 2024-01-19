@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ritdu-slacker"
-version = "1.4.0"
+version = "1.4.1"
 description = "Simple internal Slack API wrapper"
 authors = [
     "Ringier Tech <tools@ringier.co.za>",
