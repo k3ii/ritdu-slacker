@@ -35,7 +35,7 @@ class SlackClient:
         fallback = text
         # fallback_message cannot be a dict, set to blank str if we detect SlackJson
         if command == "SlackJson":
-            fallback = "Error sending json, fallback string stub."
+            fallback = "Sent via fw-slacker with json message"
 
         data = {
             "command": command,
