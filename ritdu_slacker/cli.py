@@ -100,7 +100,6 @@ class SlackMessageCLI:
     main.add_command(message)
 
     @click.command(help="Command to send file to thread")
-    @click.option("--debug", is_flag=True, help="Switch to debug logging")
     @click.option("--text", "-m", default=None, required=False, help="text to send")
     @click.option(
         "--workspace", "-w", default=None, required=True, help="slack workspace name"
@@ -142,14 +141,21 @@ class SlackMessageCLI:
         required=True,
         help="file to send to slack",
     )
+    @click.option(
+        "--command",
+        "-k",
+        default="SimpleMessage",
+        required=False,
+        help="SimpleMessage|SlackJson",
+    )
     def file(
-        debug,
         text,
         thread_uuid,
         message_uuid,
         message_or_thread_uuid,
         workspace,
         channel,
+        command,
         file,
         thread_broadcast,
     ):
@@ -157,7 +163,7 @@ class SlackMessageCLI:
 
         file_basename = os.path.basename(file)
         sender = get_client()
-        with open(file, "rb") as file:
+        with open(file, "rb") as open_file:
             result = sender.post_file(
                 text=f"{text}" if text else f"File: {file_basename}",
                 thread_uuid=thread_uuid if thread_uuid else "",
@@ -167,7 +173,8 @@ class SlackMessageCLI:
                 else "",
                 workspace=workspace,
                 channel=channel,
-                file_bytes=file,
+                command=command,
+                file_bytes=open_file,
                 thread_broadcast=thread_broadcast,
             )
         print(json.dumps(result))
