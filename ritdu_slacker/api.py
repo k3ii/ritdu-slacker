@@ -25,11 +25,11 @@ class SlackClient:
         text,
         workspace,
         channel,
-        command,
-        thread_uuid,
-        message_uuid,
-        message_or_thread_uuid,
-        thread_broadcast,
+        command="SimpleMessage",
+        thread_uuid=None,
+        message_uuid=None,
+        message_or_thread_uuid=None,
+        thread_broadcast=False,
     ):
         url = "https://slacker.cube-services.net/api/message-template"
         fallback = text
