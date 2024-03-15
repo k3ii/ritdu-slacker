@@ -57,6 +57,7 @@ class SlackClient:
         text,
         workspace,
         channel,
+        command="SimpleMessage",
         thread_uuid=None,
         message_uuid=None,
         message_or_thread_uuid=None,
@@ -65,7 +66,7 @@ class SlackClient:
         url = "https://slacker.cube-services.net/api/message-template"
         files = {"file": file_bytes}
         data = {
-            "command": "SimpleMessage",
+            "command": command,
             "workspace": workspace,
             "channel": channel,
             "message_uuid": message_uuid,
