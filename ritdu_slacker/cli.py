@@ -142,6 +142,11 @@ class SlackMessageCLI:
         required=True,
         help="file to send to slack",
     )
+    @click.option(
+        "--command", "-k", default="SimpleMessage",
+        required=False,
+        help="SimpleMessage|SlackJson",
+    )
     def file(
         debug,
         text,
@@ -150,6 +155,7 @@ class SlackMessageCLI:
         message_or_thread_uuid,
         workspace,
         channel,
+        command,
         file,
         thread_broadcast,
     ):
@@ -167,6 +173,7 @@ class SlackMessageCLI:
                 else "",
                 workspace=workspace,
                 channel=channel,
+                command=command,
                 file_bytes=file,
                 thread_broadcast=thread_broadcast,
             )
