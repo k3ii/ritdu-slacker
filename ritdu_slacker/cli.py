@@ -143,7 +143,9 @@ class SlackMessageCLI:
         help="file to send to slack",
     )
     @click.option(
-        "--command", "-k", default="SimpleMessage",
+        "--command",
+        "-k",
+        default="SimpleMessage",
         required=False,
         help="SimpleMessage|SlackJson",
     )
