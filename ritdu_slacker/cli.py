@@ -150,7 +150,7 @@ class SlackMessageCLI:
         help="SimpleMessage|SlackJson",
     )
     def file(
-        debug,
+        self,
         text,
         thread_uuid,
         message_uuid,
@@ -165,7 +165,7 @@ class SlackMessageCLI:
 
         file_basename = os.path.basename(file)
         sender = get_client()
-        with open(file, "rb") as file:
+        with open(file, "rb") as open_file:
             result = sender.post_file(
                 text=f"{text}" if text else f"File: {file_basename}",
                 thread_uuid=thread_uuid if thread_uuid else "",
@@ -176,7 +176,7 @@ class SlackMessageCLI:
                 workspace=workspace,
                 channel=channel,
                 command=command,
-                file_bytes=file,
+                file_bytes=open_file,
                 thread_broadcast=thread_broadcast,
             )
         print(json.dumps(result))

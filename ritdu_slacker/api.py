@@ -1,6 +1,6 @@
 from requests import Session
 from requests.adapters import HTTPAdapter
-from requests.packages.urllib3.util.retry import Retry
+from urllib3.util import Retry
 
 
 class SlackClient:
@@ -25,11 +25,11 @@ class SlackClient:
         text,
         workspace,
         channel,
-        command="SimpleMessage",
-        thread_uuid=None,
-        message_uuid=None,
-        message_or_thread_uuid=None,
-        thread_broadcast=False,
+        command,
+        thread_uuid,
+        message_uuid,
+        message_or_thread_uuid,
+        thread_broadcast,
     ):
         url = "https://slacker.cube-services.net/api/message-template"
         fallback = text
