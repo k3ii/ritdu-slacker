@@ -12,7 +12,7 @@ class MessageFormatter:
             }
         self.emoji_map = emoji_map
 
-    def init_messages(self, category, title, details):
+    def init_messages(self, category, title, details, code=False):
         emoji = self.emoji_map.get(category.upper(), self.emoji_map["UNKNOWN"])
         blocks = {"blocks": []}
         blocks["blocks"].append(
@@ -25,7 +25,9 @@ class MessageFormatter:
             }
         )
         if isinstance(details, list):
-            block_text = "```" + json.dumps(details, indent=2) + "```"
+            block_text = json.dumps(details, indent=2)
+            if code:
+                block_text = "```" + block_text + "```"
             blocks["blocks"].extend(
                 [
                     {
