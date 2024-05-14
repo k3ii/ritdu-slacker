@@ -87,9 +87,9 @@ class SlackMessageCLI:
             text=text,
             thread_uuid=thread_uuid if thread_uuid else "",
             message_uuid=message_uuid if message_uuid else "",
-            message_or_thread_uuid=message_or_thread_uuid
-            if message_or_thread_uuid
-            else "",
+            message_or_thread_uuid=(
+                message_or_thread_uuid if message_or_thread_uuid else ""
+            ),
             workspace=workspace,
             command=command,
             channel=channel,
@@ -168,9 +168,9 @@ class SlackMessageCLI:
                 text=f"{text}" if text else f"File: {file_basename}",
                 thread_uuid=thread_uuid if thread_uuid else "",
                 message_uuid=message_uuid if message_uuid else "",
-                message_or_thread_uuid=message_or_thread_uuid
-                if message_or_thread_uuid
-                else "",
+                message_or_thread_uuid=(
+                    message_or_thread_uuid if message_or_thread_uuid else ""
+                ),
                 workspace=workspace,
                 channel=channel,
                 command=command,
