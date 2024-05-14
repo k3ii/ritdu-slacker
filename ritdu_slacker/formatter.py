@@ -27,7 +27,7 @@ class MessageFormatter:
         if isinstance(details, list):
             block_text = json.dumps(details, indent=2)
             if code:
-                block_text = "```" + block_text + "```"
+                block_text = f"```\n{block_text}\n```"
             blocks["blocks"].extend(
                 [
                     {
@@ -40,6 +40,8 @@ class MessageFormatter:
                 ]
             )
         elif isinstance(details, str):
+            if code:
+                details = f"```\n{details}\n```"
             blocks["blocks"].extend(
                 [
                     {
@@ -58,7 +60,7 @@ class MessageFormatter:
         if isinstance(details, list):
             block_text = json.dumps(details, indent=2)
             if code:
-                block_text = "```" + block_text + "```"
+                block_text = f"```\n{block_text}\n```"
             blocks["blocks"].extend(
                 [
                     {
@@ -71,6 +73,8 @@ class MessageFormatter:
                 ]
             )
         elif isinstance(details, str):
+            if code:
+                details = f"```\n{details}\n```"
             blocks["blocks"].extend(
                 [
                     {
@@ -83,3 +87,4 @@ class MessageFormatter:
                 ]
             )
         return blocks
+
