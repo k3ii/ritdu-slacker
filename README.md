@@ -71,3 +71,6 @@ vscode               Update VSCode settings
 ```
 
 Please read the _Makefile_ to see what each task does.
+
+## Deployment
+To deploy a new version of the package to PyPI, you need to bump the version in the _pyproject.toml_ file and then push the tag (prefixed by v) to the repository.
