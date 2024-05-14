@@ -3,9 +3,11 @@ from ritdu_slacker.formatter import MessageFormatter
 import pytest
 import json
 
+
 @pytest.fixture
 def formatter():
     return MessageFormatter()
+
 
 def test_init_messages(formatter):
     category = "INFO"
@@ -70,4 +72,3 @@ def test_thread_messages(formatter):
     details = ["Item 1", "Item 2"]
     expected_blocks["blocks"][0]["text"]["text"] = json.dumps(details, indent=2)
     assert formatter.thread_messages(details, code) == expected_blocks
-
